@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PickerView">
+        <attr name="MaxTextSize" format="dimension" />
+        <attr name="MinTextSize" format="dimension" />
+        <attr name="MaxTextAlpha" format="integer" />
+        <attr name="MinTextAlpha" format="integer" />
+        <attr name="TextColor" format="color" />
+    </declare-styleable>
+</resources>
