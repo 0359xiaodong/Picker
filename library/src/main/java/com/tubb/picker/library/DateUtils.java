@@ -14,8 +14,6 @@ import java.util.Locale;
  */
 public class DateUtils {
 
-    public static String[] weekName = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
-
     public static int getMonthDays(int year, int month) {
         if (month > 12) {
             month = 1;
@@ -28,7 +26,7 @@ public class DateUtils {
         int days = 0;
 
         if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-            arr[1] = 29; // 闰年2月29天
+            arr[1] = 29;
         }
 
         try {

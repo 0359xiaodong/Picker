@@ -29,8 +29,8 @@ public class DatePicker {
 
     /**
      *
-     * @param previousYear 开始年份
-     * @param afterYear 结束年份
+     * @param previousYear
+     * @param afterYear
      */
     public void start(int previousYear, int afterYear) {
 

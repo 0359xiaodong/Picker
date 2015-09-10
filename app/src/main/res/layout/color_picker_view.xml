@@ -32,7 +32,7 @@
 
         <com.tubb.picker.library.PickerView
             android:id="@+id/pvColor"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="150dp"
             pickerview:MaxTextSize="20sp"
             pickerview:MinTextSize="15sp"
