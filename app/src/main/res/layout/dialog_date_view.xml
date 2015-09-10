@@ -31,31 +31,78 @@
         android:background="#f5f5f5"
         android:orientation="horizontal">
 
-        <com.tubb.picker.library.PickerView
-            android:id="@+id/pvYear"
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            pickerview:MaxTextSize="20sp"
-            pickerview:MinTextSize="15sp"
-            pickerview:TextColor="#33ccff" />
+            android:gravity="center_horizontal">
 
-        <com.tubb.picker.library.PickerView
-            android:id="@+id/pvMonth"
-            android:layout_width="0dp"
-            android:layout_height="250dp"
-            android:layout_weight="1"
-            pickerview:MaxTextSize="20sp"
-            pickerview:MinTextSize="15sp"
-            pickerview:TextColor="#33ccff" />
+            <com.tubb.picker.library.PickerView
+                android:id="@+id/pvYear"
+                android:layout_width="80dp"
+                android:layout_height="250dp"
+                android:layout_weight="1"
+                pickerview:MaxTextSize="20sp"
+                pickerview:MinTextSize="15sp"
+                pickerview:TextColor="#33ccff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/pvYear"
+                android:text="年"
+                android:textColor="#33ccff"
+                android:textSize="20sp"
+                />
+        </RelativeLayout>
 
-        <com.tubb.picker.library.PickerView
-            android:id="@+id/pvDay"
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            pickerview:MaxTextSize="20sp"
-            pickerview:MinTextSize="15sp"
-            pickerview:TextColor="#33ccff" />
+            android:gravity="center_horizontal">
+
+            <com.tubb.picker.library.PickerView
+                android:id="@+id/pvMonth"
+                android:layout_width="40dp"
+                android:layout_height="250dp"
+                pickerview:MaxTextSize="20sp"
+                pickerview:MinTextSize="15sp"
+                pickerview:TextColor="#33ccff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/pvMonth"
+                android:text="月"
+                android:textColor="#33ccff"
+                android:textSize="20sp"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal">
+
+            <com.tubb.picker.library.PickerView
+                android:id="@+id/pvDay"
+                android:layout_width="40dp"
+                android:layout_height="250dp"
+                pickerview:MaxTextSize="20sp"
+                pickerview:MinTextSize="15sp"
+                pickerview:TextColor="#33ccff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/pvDay"
+                android:text="日"
+                android:textColor="#33ccff"
+                android:textSize="20sp"
+                />
+        </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>

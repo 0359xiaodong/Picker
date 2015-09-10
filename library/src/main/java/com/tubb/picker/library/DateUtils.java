@@ -128,50 +128,10 @@ public class DateUtils {
         return null;
     }
 
-    public static List<String> getUpDownYears(int delay) {
-        List<String> years = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        int cYear = c.get(Calendar.YEAR);
-
-        for (int up = delay; up > 0; up--) {
-            years.add(String.format("%d年", cYear - up));
-        }
-        years.add(String.format("%d年", cYear));
-
-        for (int down = 1; down <= delay; down++) {
-            years.add(String.format("%d年", cYear + down));
-        }
-        return years;
-    }
-
-    public static List<String> getUpYears(int delay) {
-        List<String> years = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        int cYear = c.get(Calendar.YEAR);
-
-        for (int up = delay; up > 0; up--) {
-            years.add(String.format("%d年", cYear - up));
-        }
-        years.add(String.format("%d年", cYear));
-        return years;
-    }
-
-    public static List<String> getDownYears(int delay) {
-
-        List<String> years = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        int cYear = c.get(Calendar.YEAR);
-        years.add(String.format("%d年", cYear));
-        for (int down = 1; down <= delay; down++) {
-            years.add(String.format("%d年", cYear + down));
-        }
-        return years;
-    }
-
     public static List<String> getMonths() {
         List<String> months = new ArrayList<>();
         for (int month = 1; month <= 12; month++) {
-            months.add(String.format("%d月", month));
+            months.add(String.format(Locale.getDefault(), "%d", month));
         }
         return months;
     }
@@ -180,7 +140,7 @@ public class DateUtils {
         int days = getMonthDays(year, month);
         List<String> dayList = new ArrayList<>();
         for (int day = 1; day <= days; day++) {
-            dayList.add(String.format("%d日", day));
+            dayList.add(String.format(Locale.getDefault(), "%d", day));
         }
         return dayList;
     }

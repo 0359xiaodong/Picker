@@ -43,7 +43,7 @@ public class DatePicker {
 
         List<String> years = new ArrayList<>(afterYear - previousYear + 1);
         for (int year = previousYear; year <= afterYear; year++) {
-            years.add(String.format(Locale.getDefault(), "%d年", year));
+            years.add(String.format(Locale.getDefault(), "%d", year));
         }
 
         mPvYear.setData(years);
@@ -64,8 +64,8 @@ public class DatePicker {
             }
         });
 
-        mPvMonth.setCurrentItem(String.format(Locale.getDefault(), "%d月", DateUtils.getCurrentMonth()));
-        mPvDay.setCurrentItem(String.format(Locale.getDefault(), "%d日", DateUtils.getCurrentDay()));
+        mPvMonth.setCurrentItem(String.format(Locale.getDefault(), "%d", DateUtils.getCurrentMonth()));
+        mPvDay.setCurrentItem(String.format(Locale.getDefault(), "%d", DateUtils.getCurrentDay()));
     }
 
     private void updatePvDay() {
@@ -73,27 +73,27 @@ public class DatePicker {
     }
 
     public void setSelectedYear(int year) {
-        mPvYear.setCurrentItem(String.format(Locale.getDefault(), "%d年", year));
+        mPvYear.setCurrentItem(String.format(Locale.getDefault(), "%d", year));
     }
 
     public void setSelectedMonth(int month) {
-        mPvMonth.setCurrentItem(String.format(Locale.getDefault(), "%d月", month));
+        mPvMonth.setCurrentItem(String.format(Locale.getDefault(), "%d", month));
     }
 
     public void setSelectedDay(int day) {
-        mPvDay.setCurrentItem(String.format(Locale.getDefault(), "%d日", day));
+        mPvDay.setCurrentItem(String.format(Locale.getDefault(), "%d", day));
     }
 
     public int getSelectedYear() {
-        return Integer.parseInt(mPvYear.getCurrentItem().substring(0, mPvYear.getCurrentItem().length() - 1));
+        return Integer.parseInt(mPvYear.getCurrentItem());
     }
 
     public int getSelectedMonth() {
-        return Integer.parseInt(mPvMonth.getCurrentItem().substring(0, mPvMonth.getCurrentItem().length() - 1));
+        return Integer.parseInt(mPvMonth.getCurrentItem());
     }
 
     public int getSelectedDay() {
-        return Integer.parseInt(mPvDay.getCurrentItem().substring(0, mPvDay.getCurrentItem().length() - 1));
+        return Integer.parseInt(mPvDay.getCurrentItem());
     }
 
 }
