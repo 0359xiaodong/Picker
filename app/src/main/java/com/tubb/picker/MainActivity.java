@@ -1,11 +1,8 @@
 package com.tubb.picker;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,32 +11,33 @@ import com.tubb.picker.library.DateUtils;
 import com.tubb.picker.library.PickerDialog;
 import com.tubb.picker.library.PickerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvDate;
+    private TextView tvInfo;
     private PickerDialog mDatePickerDialog;
     private View datePickerView;
-    private PickerView pvYear;
-    private PickerView pvMonth;
-    private PickerView pvDay;
-    private DatePicker datePicker;
+    private PickerDialog mColorPickerDialog;
+    private View colorPickerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tvDate = (TextView)findViewById(R.id.tvDate);
+        tvInfo = (TextView)findViewById(R.id.tvInfo);
     }
 
     public void selectDate(View view){
         if (mDatePickerDialog == null) mDatePickerDialog = new PickerDialog(this);
         if (datePickerView == null) {
             datePickerView = LayoutInflater.from(this).inflate(R.layout.dialog_date_view, null);
-            pvYear = (PickerView) datePickerView.findViewById(R.id.pvYear);
-            pvMonth = (PickerView) datePickerView.findViewById(R.id.pvMonth);
-            pvDay = (PickerView) datePickerView.findViewById(R.id.pvDay);
-            datePicker = new DatePicker(pvYear, pvMonth, pvDay);
+            PickerView pvYear = (PickerView) datePickerView.findViewById(R.id.pvYear);
+            PickerView pvMonth = (PickerView) datePickerView.findViewById(R.id.pvMonth);
+            PickerView pvDay = (PickerView) datePickerView.findViewById(R.id.pvDay);
+            final DatePicker datePicker = new DatePicker(pvYear, pvMonth, pvDay);
             datePicker.start(1970, 2050);
             datePicker.setSelectedYear(2015);
             datePicker.setSelectedMonth(9);
@@ -47,11 +45,38 @@ public class MainActivity extends AppCompatActivity {
             datePickerView.findViewById(R.id.tvDatePickerYes).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    tvDate.setText(DateUtils.formatDate(datePicker.getSelectedYear(), datePicker.getSelectedMonth(), datePicker.getSelectedDay()));
+                    tvInfo.setText(DateUtils.formatDate(datePicker.getSelectedYear(), datePicker.getSelectedMonth(), datePicker.getSelectedDay()));
                     mDatePickerDialog.dismiss();
                 }
             });
         }
         mDatePickerDialog.showBottom(datePickerView);
+    }
+
+    public void selectColor(View view){
+        if(mColorPickerDialog == null) mColorPickerDialog = new PickerDialog(this);
+        if(colorPickerView == null){
+            colorPickerView = LayoutInflater.from(this).inflate(R.layout.color_picker_view, null);
+            final PickerView colorPv = (PickerView) colorPickerView.findViewById(R.id.pvColor);
+            colorPickerView.findViewById(R.id.tvOk).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tvInfo.setText(colorPv.getCurrentItem());
+                    mColorPickerDialog.dismiss();
+                }
+            });
+            colorPv.setData(getColors());
+        }
+        mColorPickerDialog.showBottom(colorPickerView);
+    }
+
+    private List<String> getColors() {
+        List<String> colors = new ArrayList<>();
+        colors.add("红");
+        colors.add("蓝");
+        colors.add("白");
+        colors.add("绿");
+        colors.add("紫");
+        return colors;
     }
 }
