@@ -8,6 +8,12 @@ Demo
 
 Usage
 =====
+Add to dependencies
+```
+dependencies {
+    compile 'com.tubb.picker.library:picker:3.0'
+}
+```
 该类库使用很简单，PickerView是一个自定义的View，直接可以在layout文件中使用，代码中只需要设置好列表数据就行，具体如何使用可以查看示例代码
 ```xml
         <com.tubb.picker.library.PickerView
