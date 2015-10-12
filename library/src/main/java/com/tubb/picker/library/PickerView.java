@@ -19,9 +19,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * 选择器（仿iOS）
- */
 public class PickerView extends View
 {
 

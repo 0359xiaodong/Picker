@@ -1,67 +1,31 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-version = "2.0"
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+
+buildscript{
+    repositories {
+        jcenter {
+            url "http://jcenter.bintray.com/"
+        }
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.3.4'
+    }
+}
 
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
-    resourcePrefix "Picker_"
 
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 22
-        versionCode 2
-        versionName version
+        versionCode 3
+        versionName "3.0"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        encoding "UTF-8"
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-}
-
-
-def siteUrl = "https://github.com/TUBB/Picker"
-def gitUrl = "https://github.com/TUBB/Picker.git"
-
-group = "com.tubb.picker.library"
-
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper paramters
-        pom {
-            project {
-                packaging 'aar'
-                name 'Picker for Android'
-                url siteUrl
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'tubb'
-                        name 'pobi'
-                        email 'tu.bingbing@163.com'
-                    }
-                }
-
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
         }
     }
 }
@@ -72,47 +36,11 @@ dependencies {
     compile 'com.android.support:support-annotations:22.2.0'
 }
 
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    //bintray.user=username
-    //bintray.apikey=apikey
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-
-    pkg {
-        repo = "maven"
-        name = "Picker"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+publish {
+    userOrg = 'tubb'
+    groupId = 'com.tubb.picker.library'
+    artifactId = 'picker'
+    publishVersion = '3.0'
+    desc = 'A picker view for Android'
+    website = 'https://github.com/TUBB/Picker'
 }
