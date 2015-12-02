@@ -119,4 +119,7 @@ PickerView support many attrs, you can custom your own's style.
     </declare-styleable>
 ```
 
+New Features
+=====
+Add setCurrentItem(String item) method, you can set current selected item.
 
