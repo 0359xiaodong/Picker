@@ -11,7 +11,7 @@ Usage
 Add to dependencies
 ```
 dependencies {
-    compile 'com.tubb.picker.library:picker:3.0'
+    compile 'com.tubb.picker.library:picker:5.0'
 }
 ```
 Is easy to use, PickerView is an custom view that support layout_width and layout_height attr, you can use it in your layout.
