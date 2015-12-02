@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
             PickerView pvDay = (PickerView) datePickerView.findViewById(R.id.pvDay);
             final DatePicker datePicker = new DatePicker(pvYear, pvMonth, pvDay);
             datePicker.start(1970, 2050);
-            datePicker.setSelectedYear(2015);
-            datePicker.setSelectedMonth(9);
-            datePicker.setSelectedDay(10);
+            datePicker.setSelectedYear(DateUtils.getCurrentYear());
+            datePicker.setSelectedMonth(DateUtils.getCurrentMonth());
+            datePicker.setSelectedDay(DateUtils.getCurrentDay());
             datePickerView.findViewById(R.id.tvDatePickerYes).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -72,11 +72,13 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> getColors() {
         List<String> colors = new ArrayList<>();
-        colors.add("红");
-        colors.add("蓝");
-        colors.add("白");
-        colors.add("绿");
-        colors.add("紫");
+        colors.add("Red");
+        colors.add("Orange");
+        colors.add("Yellow");
+        colors.add("Green");
+        colors.add("Blue");
+        colors.add("Indigo");
+        colors.add("Violet");
         return colors;
     }
 }

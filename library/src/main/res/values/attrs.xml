@@ -6,5 +6,7 @@
         <attr name="MaxTextAlpha" format="integer" />
         <attr name="MinTextAlpha" format="integer" />
         <attr name="TextColor" format="color" />
+        <attr name="Speed" format="float"/>
+        <attr name="MarginAlpha" format="float"/>
     </declare-styleable>
 </resources>

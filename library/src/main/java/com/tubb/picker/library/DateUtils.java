@@ -131,7 +131,10 @@ public class DateUtils {
     public static List<String> getMonths() {
         List<String> months = new ArrayList<>();
         for (int month = 1; month <= 12; month++) {
-            months.add(String.format(Locale.getDefault(), "%d", month));
+            if(month >= 10)
+                months.add(String.format(Locale.getDefault(), "%d", month));
+            else
+                months.add(String.format(Locale.getDefault(), "0%d", month));
         }
         return months;
     }
@@ -140,7 +143,10 @@ public class DateUtils {
         int days = getMonthDays(year, month);
         List<String> dayList = new ArrayList<>();
         for (int day = 1; day <= days; day++) {
-            dayList.add(String.format(Locale.getDefault(), "%d", day));
+            if(day >= 10)
+                dayList.add(String.format(Locale.getDefault(), "%d", day));
+            else
+                dayList.add(String.format(Locale.getDefault(), "0%d", day));
         }
         return dayList;
     }

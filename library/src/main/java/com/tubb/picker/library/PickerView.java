@@ -7,14 +7,19 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,12 +29,14 @@ public class PickerView extends View
 
     @SuppressWarnings("unused")
     public static final String TAG = "PickerView";
-    public static final float MARGIN_ALPHA = 2.8f;
-    public static final float SPEED = 2;
 
     private List<String> mDataList;
     private int mCurrentSelected;
     private Paint mPaint;
+
+    private float mSpeed = 2.0f;
+
+    private float mMarginAlpha = 2.0f;
 
     private int mMaxTextSize = 60;
     private int mMinTextSize = 36;
@@ -49,13 +56,16 @@ public class PickerView extends View
     private Timer timer;
     private MyTimerTask mTask;
 
+    private int mLayoutWidthAttr;
+    private int mLayoutHeightAttr;
+
     Handler updateHandler = new Handler()
     {
 
         @Override
         public void handleMessage(Message msg)
         {
-            if (Math.abs(mMoveLen) < SPEED)
+            if (Math.abs(mMoveLen) < mSpeed)
             {
                 mMoveLen = 0;
                 if (mTask != null)
@@ -65,7 +75,7 @@ public class PickerView extends View
                     performSelect();
                 }
             } else
-                mMoveLen = mMoveLen - mMoveLen / Math.abs(mMoveLen) * SPEED;
+                mMoveLen = mMoveLen - mMoveLen / Math.abs(mMoveLen) * mSpeed;
             invalidate();
         }
 
@@ -84,8 +94,17 @@ public class PickerView extends View
         mColorText = a.getColor(R.styleable.PickerView_TextColor, mColorText);
         mMaxTextAlpha = a.getInteger(R.styleable.PickerView_MaxTextAlpha, mMaxTextAlpha);
         mMinTextAlpha = a.getInteger(R.styleable.PickerView_MinTextAlpha, mMinTextAlpha);
+        mSpeed = a.getFloat(R.styleable.PickerView_Speed, mSpeed);
+        mMarginAlpha = a.getFloat(R.styleable.PickerView_MarginAlpha, mMarginAlpha);
         a.recycle();
         init();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mLayoutWidthAttr = getLayoutParams().width;
+        mLayoutHeightAttr = getLayoutParams().height;
     }
 
     public void setOnSelectListener(onSelectListener listener)
@@ -99,8 +118,38 @@ public class PickerView extends View
 
     public void setCurrentItem(String item){
         if(item == null || "".equals(item)) return;
-        mCurrentSelected = mDataList.indexOf(item);
-        if(mCurrentSelected < 0) mCurrentSelected = mDataList.size() / 2;
+        int index = mDataList.indexOf(item);
+        if(index < 0){
+            mCurrentSelected = mDataList.size() / 2;
+        } else { // adjust the middle item
+            LinkedList<String> snakeList = new LinkedList<>(mDataList);
+            int middleIndex = snakeList.size() / 2;
+            if(index == middleIndex){
+                mCurrentSelected = index;
+            }else{
+                if(index < middleIndex){
+                    int preCursor = middleIndex - index;
+                    List<String> preLast = snakeList.subList(snakeList.size() - preCursor, snakeList.size());
+                    List<String> rList = new LinkedList<>();
+                    rList.addAll(preLast);
+                    for (String date:rList){
+                        snakeList.remove(date);
+                    }
+                    snakeList.addAll(0, rList);
+                }else if(index > middleIndex){
+                    int lastCursor = index - middleIndex;
+                    List<String> lastPre = snakeList.subList(0, lastCursor);
+                    List<String> rList = new LinkedList<>();
+                    rList.addAll(lastPre);
+                    for (String date:rList){
+                        snakeList.remove(date);
+                    }
+                    snakeList.addAll(snakeList.size(), rList);
+                }
+                mDataList = snakeList;
+                mCurrentSelected = mDataList.size() / 2;
+            }
+        }
         invalidate();
     }
 
@@ -112,8 +161,41 @@ public class PickerView extends View
 
     public void setData(List<String> datas)
     {
+        if(datas == null || datas.size() == 0) return;
         mDataList = datas;
         mCurrentSelected = datas.size() / 2;
+
+        // find the largest length item
+        List<String> sortList = new ArrayList<>(datas);
+        Collections.sort(sortList, new Comparator<String>() {
+            @Override
+            public int compare(String lhs, String rhs) {
+                return rhs.length() - lhs.length();
+            }
+        });
+
+        // calculate width
+        String item = sortList.get(0);
+        if(getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT){
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setStyle(Style.FILL);
+            paint.setTextAlign(Align.CENTER);
+            paint.setTextSize(mMaxTextSize);
+            mViewWidth = (int)(paint.measureText(item) + 0.5f);
+        }
+
+        // calculate height (base on MinTextSize)
+        if(getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT){
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(mColorText);
+            paint.setTextAlign(Paint.Align.CENTER);
+            paint.setTextSize(mMinTextSize);
+            Rect bounds = new Rect();
+            paint.getTextBounds(item.substring(0, 1), 0, 1, bounds);
+            int itemHeight = bounds.height();
+            mViewHeight = (int)((mMarginAlpha - 1.0f) * itemHeight * (datas.size()-1)) + itemHeight * datas.size();
+        }
         invalidate();
     }
 
@@ -141,8 +223,13 @@ public class PickerView extends View
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mViewHeight = getMeasuredHeight();
-        mViewWidth = getMeasuredWidth();
+        if(mLayoutWidthAttr != ViewGroup.LayoutParams.WRAP_CONTENT){
+            mViewWidth = getMeasuredWidth();
+        }
+        if(mLayoutHeightAttr != ViewGroup.LayoutParams.WRAP_CONTENT){
+            mViewHeight = getMeasuredHeight();
+        }
+        setMeasuredDimension(mViewWidth, mViewHeight);
         isInit = true;
     }
 
@@ -194,7 +281,7 @@ public class PickerView extends View
      */
     private void drawOtherText(Canvas canvas, int position, int type)
     {
-        float d = MARGIN_ALPHA * mMinTextSize * position + type * mMoveLen;
+        float d = mMarginAlpha * mMinTextSize * position + type * mMoveLen;
         float scale = parabola(mMaxTextSize, d);
         float size = (mMaxTextSize - mMinTextSize) * scale + mMinTextSize;
         mPaint.setTextSize(size);
@@ -250,14 +337,14 @@ public class PickerView extends View
 
         mMoveLen += (event.getY() - mLastDownY);
 
-        if (mMoveLen > MARGIN_ALPHA * mMinTextSize / 2)
+        if (mMoveLen > mMarginAlpha * mMinTextSize / 2)
         {
             moveTailToHead();
-            mMoveLen = mMoveLen - MARGIN_ALPHA * mMinTextSize;
-        } else if (mMoveLen < -MARGIN_ALPHA * mMinTextSize / 2)
+            mMoveLen = mMoveLen - mMarginAlpha * mMinTextSize;
+        } else if (mMoveLen < -mMarginAlpha * mMinTextSize / 2)
         {
             moveHeadToTail();
-            mMoveLen = mMoveLen + MARGIN_ALPHA * mMinTextSize;
+            mMoveLen = mMoveLen + mMarginAlpha * mMinTextSize;
         }
 
         mLastDownY = event.getY();

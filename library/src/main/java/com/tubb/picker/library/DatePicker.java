@@ -45,11 +45,9 @@ public class DatePicker {
         for (int year = previousYear; year <= afterYear; year++) {
             years.add(String.format(Locale.getDefault(), "%d", year));
         }
-
         mPvYear.setData(years);
         mPvMonth.setData(DateUtils.getMonths());
         mPvDay.setData(DateUtils.getDayList(getSelectedYear(), getSelectedMonth()));
-
         mPvYear.setOnSelectListener(new PickerView.onSelectListener() {
             @Override
             public void onSelect(String year) {
@@ -77,11 +75,17 @@ public class DatePicker {
     }
 
     public void setSelectedMonth(int month) {
-        mPvMonth.setCurrentItem(String.format(Locale.getDefault(), "%d", month));
+        if(month >= 10)
+            mPvMonth.setCurrentItem(String.format(Locale.getDefault(), "%d", month));
+        else
+            mPvMonth.setCurrentItem(String.format(Locale.getDefault(), "0%d", month));
     }
 
     public void setSelectedDay(int day) {
-        mPvDay.setCurrentItem(String.format(Locale.getDefault(), "%d", day));
+        if(day >= 10)
+            mPvDay.setCurrentItem(String.format(Locale.getDefault(), "%d", day));
+        else
+            mPvDay.setCurrentItem(String.format(Locale.getDefault(), "0%d", day));
     }
 
     public int getSelectedYear() {
